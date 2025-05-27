@@ -3,16 +3,16 @@ const Event = require('../model/Event');
 
 exports.createHistory = async (req, res) => {
   try {
-    const { idHistory, idEvent, account } = req.body;
+    const { idEvent, account } = req.body;
 
-    if (!idHistory || !idEvent || !account) {
+    if (!idEvent || !account) {
       return res.status(400).json({
         status: 'fail',
         message: 'idHistory, idEvent, dan account wajib diisi.'
       });
     }
 
-    const newHistory = new History({ idHistory, idEvent, account });
+    const newHistory = new History({idEvent, account });
     const savedHistory = await newHistory.save();
 
     res.status(200).json({
@@ -35,7 +35,7 @@ exports.getAllHistories = async (req, res) => {
 
     const historiesWithEvent = await Promise.all(
         histories.map(async (history) => {
-          const event = await Event.findOne({ idEvent: history.idEvent });
+          const event = await Event.findById(history.idEvent);
           return {
             ...history.toObject(),
             event: event || null, 
@@ -57,13 +57,13 @@ exports.getAllHistories = async (req, res) => {
 
 exports.deleteHistory = async (req, res) => {
   try {
-    const idHistory = req.params.idHistory;
-    const history = await History.findOneAndDelete({ idHistory: idHistory });
+    const id = req.params.id;
+    const history = await History.findByIdAndDelete(id);
 
     if (!history) {
       return res.status(404).json({
         status: 'fail',
-        message: `History dengan idHistory '${idHistory}' tidak ditemukan.`
+        message: `History dengan idHistory '${id}' tidak ditemukan.`
       });
     }
 
@@ -83,11 +83,11 @@ exports.deleteHistory = async (req, res) => {
 
 exports.updateHistory = async (req, res) => {
   try {
-    const idHistory = req.params.idHistory;
+    const id = req.params.id;
     const { idEvent, account } = req.body;
 
-    const updatedHistory = await History.findOneAndUpdate(
-      { idHistory },
+    const updatedHistory = await History.findByIdAndUpdate(
+      id,
       { idEvent, account },
       { new: true }
     );

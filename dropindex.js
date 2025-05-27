@@ -12,7 +12,7 @@ async function dropIndex() {
     const db = mongoose.connection.db;
 
     // Hapus index 'id_1'
-    await db.collection('events').dropIndex('id_1');
+    await db.collection('histories').dropIndex('idHistory_1');
 
     console.log('Index id_1 berhasil dihapus.');
 

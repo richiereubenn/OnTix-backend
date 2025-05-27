@@ -1,13 +1,8 @@
 const mongoose = require('mongoose');
 
 const historySchema = new mongoose.Schema({
-  idHistory: {
-    type: String,
-    required: true,
-    unique: true, 
-  },
   idEvent: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
   account: {
