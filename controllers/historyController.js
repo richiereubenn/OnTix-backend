@@ -1,0 +1,114 @@
+const History = require('../model/History');
+const Event = require('../model/Event');
+
+exports.createHistory = async (req, res) => {
+  try {
+    const { idHistory, idEvent, account } = req.body;
+
+    if (!idHistory || !idEvent || !account) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'idHistory, idEvent, dan account wajib diisi.'
+      });
+    }
+
+    const newHistory = new History({ idHistory, idEvent, account });
+    const savedHistory = await newHistory.save();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'History created',
+      data: savedHistory
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to create history',
+      error: err.message
+    });
+  }
+};
+
+exports.getAllHistories = async (req, res) => {
+  try {
+    const histories = await History.find();
+
+    const historiesWithEvent = await Promise.all(
+        histories.map(async (history) => {
+          const event = await Event.findOne({ idEvent: history.idEvent });
+          return {
+            ...history.toObject(),
+            event: event || null, 
+          };
+        })
+      );
+    res.status(200).json({
+      status: 'success',
+      data: historiesWithEvent
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to get all histories',
+      error: err.message
+    });
+  }
+};
+
+exports.deleteHistory = async (req, res) => {
+  try {
+    const idHistory = req.params.idHistory;
+    const history = await History.findOneAndDelete({ idHistory: idHistory });
+
+    if (!history) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `History dengan idHistory '${idHistory}' tidak ditemukan.`
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'History deleted',
+      data: history
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to delete history',
+      error: err.message
+    });
+  }
+};
+
+exports.updateHistory = async (req, res) => {
+  try {
+    const idHistory = req.params.idHistory;
+    const { idEvent, account } = req.body;
+
+    const updatedHistory = await History.findOneAndUpdate(
+      { idHistory },
+      { idEvent, account },
+      { new: true }
+    );
+
+    if (!updatedHistory) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'History tidak ditemukan.'
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'History berhasil diperbarui.',
+      data: updatedHistory
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Gagal mengupdate history.',
+      error: err.message
+    });
+  }
+};
