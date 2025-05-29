@@ -4,6 +4,7 @@ const morgan = require('morgan');
 
 const eventRoutes = require('./routes/eventRoute');
 const historyRoutes = require('./routes/historyRoute');
+const resaleRoutes = require('./routes/resaleRoute');
 const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use('/api', eventRoutes);
 app.use('/api', historyRoutes);
+app.use('/api', resaleRoutes);
 
 app.use(errorHandler);
 

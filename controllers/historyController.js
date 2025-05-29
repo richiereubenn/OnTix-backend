@@ -3,16 +3,16 @@ const Event = require('../model/Event');
 
 exports.createHistory = async (req, res) => {
   try {
-    const { idEvent, account } = req.body;
+    const { idEvent, idTicket, account } = req.body;
 
-    if (!idEvent || !account) {
+    if (!idEvent || !idTicket || !account) {
       return res.status(400).json({
         status: 'fail',
         message: 'idHistory, idEvent, dan account wajib diisi.'
       });
     }
 
-    const newHistory = new History({idEvent, account });
+    const newHistory = new History({idEvent, idTicket, account });
     const savedHistory = await newHistory.save();
 
     res.status(200).json({
@@ -63,7 +63,7 @@ exports.deleteHistory = async (req, res) => {
     if (!history) {
       return res.status(404).json({
         status: 'fail',
-        message: `History dengan idHistory '${id}' tidak ditemukan.`
+        message: `History dengan tidak ditemukan.`
       });
     }
 
@@ -84,11 +84,11 @@ exports.deleteHistory = async (req, res) => {
 exports.updateHistory = async (req, res) => {
   try {
     const id = req.params.id;
-    const { idEvent, account } = req.body;
+    const { idEvent, idTicket, account } = req.body;
 
     const updatedHistory = await History.findByIdAndUpdate(
       id,
-      { idEvent, account },
+      { idEvent, idTicket, account },
       { new: true }
     );
 

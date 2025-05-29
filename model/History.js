@@ -5,6 +5,10 @@ const historySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
+  idTicket: {
+    type: String,
+    required: true,
+  },
   account: {
     type: String,
     required: true,

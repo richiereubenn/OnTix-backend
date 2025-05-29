@@ -48,7 +48,7 @@ exports.deleteEvents = async (req, res) => {
     if (!event) {
       return res.status(404).json({
         status: 'fail',
-        message: `Event dengan idEvent '${id}' tidak ditemukan.`
+        message: `Event dengan tidak ditemukan.`
       });
     }
 
