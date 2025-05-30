@@ -8,7 +8,7 @@ exports.createHistory = async (req, res) => {
     if (!idEvent || !idTicket || !account) {
       return res.status(400).json({
         status: 'fail',
-        message: 'idHistory, idEvent, dan account wajib diisi.'
+        message: 'idHistory, idEvent, dan account is required.'
       });
     }
 
@@ -63,7 +63,7 @@ exports.deleteHistory = async (req, res) => {
     if (!history) {
       return res.status(404).json({
         status: 'fail',
-        message: `History dengan tidak ditemukan.`
+        message: `History not found.`
       });
     }
 
@@ -95,19 +95,19 @@ exports.updateHistory = async (req, res) => {
     if (!updatedHistory) {
       return res.status(404).json({
         status: 'fail',
-        message: 'History tidak ditemukan.'
+        message: 'History not found.'
       });
     }
 
     res.status(200).json({
       status: 'success',
-      message: 'History berhasil diperbarui.',
+      message: 'History updated.',
       data: updatedHistory
     });
   } catch (err) {
     res.status(500).json({
       status: 'error',
-      message: 'Gagal mengupdate history.',
+      message: 'Failed to update history.',
       error: err.message
     });
   }

@@ -7,7 +7,7 @@ exports.createEvent = async (req, res, next) => {
         if (!name || !location || !description || !image) {
             return res.status(400).json({
                 status: 'fail',
-                message: 'idEvent, name, location, desc, image wajib diisi.'
+                message: 'idEvent, name, location, desc, image is required.'
             });
         }
 
@@ -48,7 +48,7 @@ exports.deleteEvents = async (req, res) => {
     if (!event) {
       return res.status(404).json({
         status: 'fail',
-        message: `Event dengan tidak ditemukan.`
+        message: `Event not found.`
       });
     }
 
@@ -80,19 +80,19 @@ exports.updateEvent = async (req, res) => {
     if (!updatedEvent) {
       return res.status(404).json({
         status: 'fail',
-        message: 'Event tidak ditemukan.'
+        message: 'Event not found.'
       });
     }
 
     res.status(200).json({
       status: 'success',
-      message: 'Event berhasil diperbarui.',
+      message: 'Event updated.',
       data: updatedEvent
     });
   } catch (err) {
     res.status(500).json({
       status: 'error',
-      message: 'Gagal mengupdate Event.',
+      message: 'Failed to update Event.',
       error: err.message
     });
   }

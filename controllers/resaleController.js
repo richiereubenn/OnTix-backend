@@ -9,7 +9,7 @@ exports.createResale = async (req, res) => {
     if (!idEvent || !idTicket) {
       return res.status(400).json({
         status: 'fail',
-        message: 'idHistory, idEvent wajib diisi.'
+        message: 'idHistory, idEvent is required.'
       });
     }
 
@@ -54,7 +54,7 @@ exports.deleteResale = async (req, res) => {
     if (!resale) {
       return res.status(404).json({
         status: 'fail',
-        message: `Resale dengan tidak ditemukan.`
+        message: `Resale not found.`
       });
     }
 
@@ -86,19 +86,19 @@ exports.updateResale = async (req, res) => {
     if (!updatedResale) {
       return res.status(404).json({
         status: 'fail',
-        message: 'Resale tidak ditemukan.'
+        message: 'Resale not found.'
       });
     }
 
     res.status(200).json({
       status: 'success',
-      message: 'Resale berhasil diperbarui.',
+      message: 'Resale updated.',
       data: updatedResale
     });
   } catch (err) {
     res.status(500).json({
       status: 'error',
-      message: 'Gagal mengupdate resale.',
+      message: 'Failed to update resale.',
       error: err.message
     });
   }
