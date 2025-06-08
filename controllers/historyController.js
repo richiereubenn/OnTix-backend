@@ -8,11 +8,11 @@ exports.createHistory = async (req, res) => {
     if (!idEvent || !idTicket || !account) {
       return res.status(400).json({
         status: 'fail',
-        message: 'idHistory, idEvent, dan account is required.'
+        message: 'idEvent, idTicket, dan account is required.'
       });
     }
 
-    const newHistory = new History({idEvent, idTicket, account });
+    const newHistory = new History({ idEvent, idTicket, account });
     const savedHistory = await newHistory.save();
 
     res.status(200).json({
@@ -34,14 +34,14 @@ exports.getAllHistories = async (req, res) => {
     const histories = await History.find();
 
     const historiesWithEvent = await Promise.all(
-        histories.map(async (history) => {
-          const event = await Event.findById(history.idEvent);
-          return {
-            ...history.toObject(),
-            event: event || null, 
-          };
-        })
-      );
+      histories.map(async (history) => {
+        const event = await Event.findById(history.idEvent);
+        return {
+          ...history.toObject(),
+          event: event || null,
+        };
+      })
+    );
     res.status(200).json({
       status: 'success',
       data: historiesWithEvent

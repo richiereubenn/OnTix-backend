@@ -13,7 +13,7 @@ exports.createResale = async (req, res) => {
       });
     }
 
-    const newResale = new Resale({idEvent, idTicket });
+    const newResale = new Resale({ idEvent, idTicket });
     const savedResale = await newResale.save();
 
     res.status(200).json({
@@ -32,10 +32,19 @@ exports.createResale = async (req, res) => {
 
 exports.getAllResales = async (req, res) => {
   try {
-    const resale = await Resale.find();
+    const resales = await Resale.find();
+    const resalesWithEvent = await Promise.all(
+      resales.map(async (resale) => {
+        const event = await Event.findById(resale.idEvent);
+        return {
+          ...resale.toObject(),
+          event: event || null,
+        };
+      })
+    );
     res.status(200).json({
       status: 'success',
-      data: resale
+      data: resalesWithEvent
     });
   } catch (err) {
     res.status(500).json({
@@ -75,7 +84,7 @@ exports.deleteResale = async (req, res) => {
 exports.updateResale = async (req, res) => {
   try {
     const id = req.params.id;
-    const { idEvent, idTicket} = req.body;
+    const { idEvent, idTicket } = req.body;
 
     const updatedResale = await Resale.findByIdAndUpdate(
       id,
